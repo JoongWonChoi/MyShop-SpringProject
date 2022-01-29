@@ -15,7 +15,7 @@ public class Delivery {
     @Column(name = "delivery_id")
     private Long id;
 
-    @OneToOne(mappedBy = "delivery") //참조되는 외래키의 기준이 되는 키!
+    @OneToOne(mappedBy = "delivery",fetch = FetchType.LAZY) //참조되는 외래키의 기준이 되는 키!
     private Order order;
 
     @Embedded
