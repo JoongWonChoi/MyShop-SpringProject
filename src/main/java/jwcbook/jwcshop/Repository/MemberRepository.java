@@ -18,6 +18,9 @@ public class MemberRepository {
 
     public void save(Member member) {
         em.persist(member); //persist : 영속성 컨텍스트에 member 객체 넣어줌.
+        // 기본적으로 persist만으로 DB에 insert문이 나가지 않음!
+        // commit을 해야 나간다고 보면 됨.
+        // commit이 되는 순간  영속성 컨텍스트에 있는 것들이 insert를 통해 DB에 저장됨
     }
 
     public Member findOne(Long id) {

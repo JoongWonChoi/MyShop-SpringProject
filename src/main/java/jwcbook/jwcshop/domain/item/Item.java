@@ -1,6 +1,7 @@
 package jwcbook.jwcshop.domain.item;
 
 import jwcbook.jwcshop.domain.Category;
+import jwcbook.jwcshop.exception.NotEnoughStockException;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -24,5 +25,24 @@ public abstract class Item { //상속관계 매핑 --  ㅎㅏ위에 아이템들
 
     @ManyToMany(mappedBy = "items")
     private List<Category> categories = new ArrayList<>();
+
+    //==비즈니스 로직==//
+    //entity클래스에 핵심 비즈니스 로직을 구현하는 이유는?
+
+    //값을 변경해야할 때 setter로 하는 것 보다, 비즈니스 로직을 구현하고 그것으로 데이터 처리하는게 가장 효과적
+
+    //재고수량(stock) 증가 로직//
+    public void addStock(int quantity) {
+        this.stockQuantity += quantity;
+    }
+    //재고 수량(stock) 감소 로직//
+    public void removeStock(int quantity) {
+        int restStock = this.stockQuantity - quantity;
+        if (restStock < 0) {
+            throw new NotEnoughStockException("need more stock . .");
+        }
+        this.stockQuantity = restStock;
+
+    }
 
 }
