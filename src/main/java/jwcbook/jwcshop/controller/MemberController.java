@@ -11,6 +11,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
@@ -51,12 +53,12 @@ public class MemberController {
         member.setName(form.getName());
         member.setAddress(address);
         /*이러한 엔티티 접근 로직이 Controller에서 가능하다는 사실을 처음 알게됨.
-        * 기존에는
-        * Controller는 오직 form에서 받아온 데이터 Service로 전송
-        * -> Service는 단순 컨트롤러에서 넘어온 데이터를 repository에 전달하기 위한, 사용자 차원의 기능
-        * -> 레포지토리에서 최종 데이터 처리 및 저장
-        * 의 개념인 줄 알았다. 하지만 Entity 클래스에 비즈니스 로직 및 조회 로직을 짜서 사용하는게 효율적인 경우가 있고.
-        * 이처럼 controller에서 정보를 처리하는 과정이 있어도 괜찮을 수 있다는 것이 새로웠다.*/
+         * 기존에는
+         * Controller는 오직 form에서 받아온 데이터 Service로 전송
+         * -> Service는 단순 컨트롤러에서 넘어온 데이터를 repository에 전달하기 위한, 사용자 차원의 기능
+         * -> 레포지토리에서 최종 데이터 처리 및 저장
+         * 의 개념인 줄 알았다. 하지만 Entity 클래스에 비즈니스 로직 및 조회 로직을 짜서 사용하는게 효율적인 경우가 있고.
+         * 이처럼 controller에서 정보를 처리하는 과정이 있어도 괜찮을 수 있다는 것이 새로웠다.*/
 
         memberService.join(member);
 
@@ -70,5 +72,37 @@ public class MemberController {
         //따라서 Member DTO나 화면에 맞는 폼 객체를 생성하는것이 더 좋음!
         model.addAttribute("members", members);
         return "members/memberList";
+    }
+
+    @GetMapping("/members/{id}/edit")
+    public String editMember(@PathVariable("id") Long id, Model model, MemberForm form) {
+        // Member member = memberService.findOne(id); ==> entity자체를 form에 넘기는 것은 좋지 않은 방식.
+        /*Member member = memberService.findOne(id);
+        form.setName(member.getName());
+        form.setCity(member.getAddress().getCity());
+        form.setStreet(member.getAddress().getStreet());
+        form.setZipcode(member.getAddress().getZipcode());*/
+        /*이렇듯 web계층에서의 목적으로 사용하는 form 객체는 setter를 사용하는것이 맞을까? 아마 NO!
+         * 그래서 MemberForm에 메서드를 생성*/
+        Member member = memberService.findOne(id);
+        //웹 계층 MemberForm 객체에 영속성 컨텍스트에 저장되었던 Member 엔티티 정보를 덮어쓰기. Entity에 직접 접근하는 것이 아닌, form에 데이터 값만을 전해주는 방식
+        //또한 MemberForm 객체에도 최대한 setter를 사용하지 않도록 정보 저장 로직 메서드 생성.
+        form.createMemberForm(
+                member.getId(),
+                member.getName(),
+                member.getAddress().getCity(),
+                member.getAddress().getStreet(),
+                member.getAddress().getZipcode());
+        model.addAttribute("form", form);
+        return "members/updateMemberForm";
+    }
+    @PostMapping("members/{id}/edit")
+    public String updateMember(@PathVariable("id")Long id, @ModelAttribute("form")MemberForm form) {
+        System.out.println("id = " + id);
+        System.out.println(form.getName());
+        System.out.println(form.getCity());
+        System.out.println(form.getStreet());
+        memberService.updateMember(id, form.getName(), form.getCity(), form.getStreet(), form.getZipcode());
+        return "redirect:/members";
     }
 }

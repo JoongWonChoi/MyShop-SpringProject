@@ -65,6 +65,10 @@ public class MemberService {
         return memberRepository.findOne(memberId);
     }
 
+    public void updateMember(Long id, String name, String city, String street, String zipcode) {
+        memberRepository.changeMember(id, name, city, street, zipcode);
+    }
+
     //회원 전체 조회
 
 

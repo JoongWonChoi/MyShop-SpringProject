@@ -24,4 +24,10 @@ public class Member {
     //연관관계에 있어서 주인이 아님을 표현.
     //order 테이블에 있는 member 에 연관관계 매핑됨.
     private List<Order> orders = new ArrayList<>();
+
+    public void change(String name, String city, String street, String zipcode) {
+        this.name = name;
+        //와우!!
+        this.address = new Address(city, street, zipcode);
+    }
 }

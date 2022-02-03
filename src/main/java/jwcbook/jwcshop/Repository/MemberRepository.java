@@ -44,6 +44,12 @@ public class MemberRepository {
                 .getResultList(); // getResultList() ==> 작성한 JQPL 쿼리로 데이터를 검색, List형태로 반환한다.
     }
 
+    public Member changeMember(Long memberId, String name, String city, String street, String zipcode) {
+        Member findMember = findOne(memberId);
+        findMember.change(name, city, street, zipcode);
+        return findMember;
+    }
+
 /*    createQuery() : JPQL 쿼리 문 작성 ==> ("JQPL쿼리", 조회할 엔티티 클래스 타입)
     getResultList() : 작성된 JPQL로 데이터 검색 후 List형태로 반환
     setParameter() : 동적으로 키워드를 JPQL에 지정하고자 할 때 사용. ==> ("JPQL에서 지정한 변수명", "동적으로 전달된 parameter")
