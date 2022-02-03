@@ -45,4 +45,12 @@ public abstract class Item { //상속관계 매핑 --  ㅎㅏ위에 아이템들
 
     }
 
+    //==업데이트를 위한 변경 로직==//
+    public void change(String name, int stockQuantity, int price) {
+        this.name = name;
+        this.price = price;
+        this.stockQuantity = stockQuantity;
+    }
+
+
 }

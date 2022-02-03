@@ -4,6 +4,7 @@ package jwcbook.jwcshop.Service;
 import jwcbook.jwcshop.Repository.ItemRepository;
 import jwcbook.jwcshop.Repository.MemberRepository;
 import jwcbook.jwcshop.Repository.OrderRepository;
+import jwcbook.jwcshop.Repository.OrderSearch;
 import jwcbook.jwcshop.domain.Delivery;
 import jwcbook.jwcshop.domain.Member;
 import jwcbook.jwcshop.domain.Order;
@@ -58,8 +59,8 @@ public class OrderService {
         order.cancel();
     }
 
-    /*//search
+    //search
     public List<Order> findOrders(OrderSearch orderSearch) {
-        orderRepository.findAll(orderSearch);
-    }*/
+        return orderRepository.findAllByCriteria(orderSearch);
+    }
 }
