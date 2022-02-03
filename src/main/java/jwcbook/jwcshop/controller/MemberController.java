@@ -97,11 +97,7 @@ public class MemberController {
         return "members/updateMemberForm";
     }
     @PostMapping("members/{id}/edit")
-    public String updateMember(@PathVariable("id")Long id, @ModelAttribute("form")MemberForm form) {
-        System.out.println("id = " + id);
-        System.out.println(form.getName());
-        System.out.println(form.getCity());
-        System.out.println(form.getStreet());
+    public String updateMember(@PathVariable("id") Long id, @ModelAttribute("form") MemberForm form) {
         memberService.updateMember(id, form.getName(), form.getCity(), form.getStreet(), form.getZipcode());
         return "redirect:/members";
     }

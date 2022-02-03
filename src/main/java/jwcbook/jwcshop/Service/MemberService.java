@@ -65,6 +65,9 @@ public class MemberService {
         return memberRepository.findOne(memberId);
     }
 
+
+    //transaction이 readonly로 되어있어서 수정 사항이 반영 되지 않았었음!!!
+    @Transactional
     public void updateMember(Long id, String name, String city, String street, String zipcode) {
         memberRepository.changeMember(id, name, city, street, zipcode);
     }
